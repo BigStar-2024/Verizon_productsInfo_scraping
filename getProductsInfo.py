@@ -20,7 +20,9 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
     writer.writerow(['Device Subtitle', 'Device Title', 'Key Feature_1', 
                      'Key Feature_2', 'Key Feature_3', 'Key Feature_4', 'Key Feature_5', 'Key Feature_6', 
                      'Product description', 'Device Type', 'Network Technology', 'LTE catagory support',
-                     'Contact_Address', 'Contact_Phone', 'Contact_Email'])
+                     'Contact_Address', 'Contact_Phone', 'Contact_Email', 'Hardware_Antenna', 
+                     'Hardware_Battery', 'Hardware_Display Resolution', 'Hardware_Ethernet Posts', 'Hardware_Sim Type', 
+                     'Hardware_USB ports', 'Hardware_Voltage supply'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -90,13 +92,32 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             contact_sales_email = [contact_sales_email_element.text]
             print(contact_sales_email)
 
+            #Hardware Field Open
+            hardware_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[0].click()
+            # Hardware Field
+            hardware_main_element = driver.find_element(By.CLASS_NAME, 'is-accordion-open')
+            hardware_main = hardware_main_element.find_elements(By.CSS_SELECTOR, '.details__content-features--no-border p')
+            print("rte", hardware_main)
+            hardware_main_antenna = [hardware_main[0].text]
+            hardware_main_battery = [hardware_main[1].text]
+            hardware_main_display = [hardware_main[2].text]
+            hardware_main_ethernet = [hardware_main[3].text]
+            hardware_main_sim = [hardware_main[4].text]
+            hardware_main_usbports = [hardware_main[6].text]
+            hardware_main_voltage = [hardware_main[7].text]
+            print(hardware_main_antenna, hardware_main_battery, hardware_main_display, hardware_main_ethernet, hardware_main_sim, 
+                  hardware_main_usbports, hardware_main_voltage)
+
+            #
 
             # Save the extracted information to a CSV file
             with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow([device_subtitle, device_title] + key_features + product_description + 
                                 overview_device_type + overview_network_technology + overview_category_support + 
-                                contact_sales + contact_sales_email)
+                                contact_sales + contact_sales_email + hardware_main_antenna + hardware_main_battery + 
+                                hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
+                                hardware_main_voltage)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
