@@ -17,7 +17,10 @@ if os.path.exists('Products_info.csv'):
 with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
 
-    writer.writerow(['Device Subtitle', 'Device Title', 'Key Feature_1', 'Key Feature_2', 'Key Feature_3', 'Key Feature_4', 'Key Feature_5', 'Key Feature_6', 'Product description', 'Device Type', 'Network Technology', 'LTE catagory support'])
+    writer.writerow(['Device Subtitle', 'Device Title', 'Key Feature_1', 
+                     'Key Feature_2', 'Key Feature_3', 'Key Feature_4', 'Key Feature_5', 'Key Feature_6', 
+                     'Product description', 'Device Type', 'Network Technology', 'LTE catagory support',
+                     'Contact_Address', 'Contact_Phone', 'Contact_Email'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -41,14 +44,17 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
         time.sleep(2)
 
         try:
+            # Device Subtitle
             device_subtitle_element = driver.find_element(By.CSS_SELECTOR, ".details__content-subtitle a")
             device_subtitle = device_subtitle_element.text
             print(device_subtitle)
 
+            # Device title
             device_title_element = driver.find_elements(By.CSS_SELECTOR, ".details__content-title")
             device_title = device_title_element[1].text
             print(device_title)
 
+            # Key Features
             key_feature_elements = driver.find_elements(By.CLASS_NAME, "details__content-item")
             key_features = [feature.text for feature in key_feature_elements]
 
@@ -57,23 +63,40 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                 key_features.append('')
             print(key_features)
 
+            # Product description
             product_description_element = driver.find_element(By.CLASS_NAME, "details__content-copy")
             product_description = [product_description_element.text]
             print(product_description)
 
+            # Overview
             overview_elements = driver.find_elements(By.CLASS_NAME, "definition-list-description")
+            ## Device Type
             overview_device_type = [overview_elements[0].text]
             print(overview_device_type)
+            ## Network Technology
             overview_network_technology = [overview_elements[1].text]
             print(overview_network_technology)
-            overview_categor_support = [overview_elements[2].text]
-            print(overview_categor_support)
-            
+            ## LTE Category Support
+            overview_category_support = [overview_elements[2].text]
+            print(overview_category_support)
+
+            # Contact Manufacturer
+            ## Sales
+            contact_sales_elements = driver.find_elements(By.CSS_SELECTOR, ".details__image-content-copy-container p")
+            contact_sales = [sales_element.text for sales_element in contact_sales_elements]
+            print(contact_sales)
+            ## Email
+            contact_sales_email_element = driver.find_element(By.CSS_SELECTOR, ".details__image-content-copy-container a")
+            contact_sales_email = [contact_sales_email_element.text]
+            print(contact_sales_email)
+
 
             # Save the extracted information to a CSV file
             with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
-                writer.writerow([device_subtitle, device_title] + key_features + product_description + overview_device_type + overview_network_technology + overview_categor_support)
+                writer.writerow([device_subtitle, device_title] + key_features + product_description + 
+                                overview_device_type + overview_network_technology + overview_category_support + 
+                                contact_sales + contact_sales_email)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
