@@ -35,7 +35,7 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Network_NAT', 'Network_Routing Protocols', 'Network_Security Protocol', 'Network_VPN Support', 'Network_Numbershare', 
                      'Network_Fax capable', 'Network_Firewall', 'Network_UMTS', 'Network_LTE', 'Network_LTE Global/Roaming', 
                      'Network_5G', 'Network_5G Global/Roaming', 'Contact_Website', 'Contact_Address', 'Contact_Phone', 
-                     'Contact_Email'])
+                     'Contact_Email', 'Industry'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -175,6 +175,16 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             contact_features = [contact_features_element.text for contact_features_element in contact_features_elements]
             print(contact_features)
 
+            # Industry open
+            industry_main_click = driver.find_elements(By.CLASS_NAME, 'details__accordion-container')[5].click()
+            print(industry_main_click)
+            ## Industry Field
+            industry_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[5]
+            ### Industry features
+            industry_features_element = industry_main_element.find_element(By.CLASS_NAME, 'details__content-features--no-border')
+            industry_features = [industry_features_element.text.replace('\n', ', ')]
+            print(industry_features)
+
 
 
 
@@ -188,7 +198,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
                                 hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
                                 software_main_system + software_features + chassis_main_features + chassis_other_features + 
-                                network_main_features + network_other_features + contact_features)
+                                network_main_features + network_other_features + contact_features + industry_features)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
