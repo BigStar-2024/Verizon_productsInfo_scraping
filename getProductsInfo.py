@@ -29,7 +29,9 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Other_Wifi', 'Zigbee', 'FoTA For Baseband/Modem Software Update Capability', 'FoTA Client Type', 'Operating System', 
                      'Soft_Developer Kit', 'Soft_Diagnostics', 'Soft_Security Level', 'Soft_EMS', 'Soft_MMS', 'Soft_Remote Management', 
                      'Soft_SMS Capability', 'Soft_WEA', 'Soft_Persistent Prefix IPv6', 'Soft_Mobile Private Network', 
-                     'Soft_FWA', 'Soft_Split Data Routing', 'Soft_Multi-APN', 'Soft_Global Capable', 'Soft_Private Wireless Network'])
+                     'Soft_FWA', 'Soft_Split Data Routing', 'Soft_Multi-APN', 'Soft_Global Capable', 'Soft_Private Wireless Network', 
+                     'Chassis_Dimensions', 'Chassis_Weight', 'Chassis_Operating Temperature', 'Chassis_Storage Temperature', 
+                     'Chassis_Relative Humidity', 'Chassis_Rain & dust resistance', 'Chassis_Vehicle Mounting'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -101,7 +103,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
 
             #Hardware Field Open
             hardware_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[0].click()
-            # Hardware Field
+            ## Hardware Field
             hardware_main_element = driver.find_element(By.CLASS_NAME, 'is-accordion-open')
             hardware_main = hardware_main_element.find_elements(By.CSS_SELECTOR, '.details__content-features--no-border p')
             hardware_main_antenna = [hardware_main[0].text]
@@ -123,7 +125,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
 
             # Software Field Open
             software_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[1].click()
-            # Software Field
+            ## Software Field
             software_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[1]
             software_main = software_main_element.find_elements(By.CSS_SELECTOR, '.details__content-features--no-border p')
             software_main_baseband = [software_main[0].text]
@@ -131,10 +133,26 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             software_main_system = [software_main[3].text]
             print(software_main_baseband, software_main_clientType, software_main_system)
 
-            # Software Features
+            ### Software Features
             software_features_elements = software_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
             software_features = [software_features_element.text.replace("\n", ",") for software_features_element in software_features_elements]
-            print("software", software_features)
+            print(software_features)
+
+            # Chassis open 
+            chassis_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[2].click()
+            ## Chassis Field
+            chassis_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[2]
+            ### Chassis main features
+            chassis_main_features_elements = chassis_main_element.find_elements(By.CLASS_NAME, 'details__content-subhead-copy--short-break')
+            chassis_main_features = [chassis_main_features_element.text for chassis_main_features_element in chassis_main_features_elements]
+            print(chassis_main_features)
+
+            ### Chassis other features
+            chassis_other_features_elements = chassis_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
+            chassis_other_features = [chassis_other_features_element.text for chassis_other_features_element in chassis_other_features_elements]
+            print(chassis_other_features)
+
+
 
             
             # Save the extracted information to a CSV file
@@ -145,7 +163,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 contact_sales + contact_sales_email + hardware_main_antenna + hardware_main_battery + 
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
                                 hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
-                                software_main_system + software_features)
+                                software_main_system + software_features + chassis_main_features + chassis_other_features)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
