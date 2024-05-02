@@ -26,7 +26,10 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Other_Battery safety', 'Other_Bluetooth', 'Other_Camera', 'Other_Dual SIM', 'Other_E911', 'Other_eUICC', 
                      'Other_GNSS', 'Other_GPSS', 'Other_GPS', 'Other_Keyboard', 'Other_Keyboard', 'Other_Magnetic card reader', 'Other_RJ-11', 
                      'Other_Scanning tech', 'Other_Serial', 'Other_Smart card reader', 'Other_Voice transmission capable', 
-                     'Other_Wifi', 'Zigbee', 'FoTA For Baseband/Modem Software Update Capability', 'FoTA Client Type', 'Operating System'])
+                     'Other_Wifi', 'Zigbee', 'FoTA For Baseband/Modem Software Update Capability', 'FoTA Client Type', 'Operating System', 
+                     'Soft_Developer Kit', 'Soft_Diagnostics', 'Soft_Security Level', 'Soft_EMS', 'Soft_MMS', 'Soft_Remote Management', 
+                     'Soft_SMS Capability', 'Soft_WEA', 'Soft_Persistent Prefix IPv6', 'Soft_Mobile Private Network', 
+                     'Soft_FWA', 'Soft_Split Data Routing', 'Soft_Multi-APN', 'Soft_Global Capable', 'Soft_Private Wireless Network'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -130,7 +133,8 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
 
             # Software Features
             software_features_elements = software_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
-            
+            software_features = [software_features_element.text.replace("\n", ",") for software_features_element in software_features_elements]
+            print("software", software_features)
 
             
             # Save the extracted information to a CSV file
@@ -141,7 +145,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 contact_sales + contact_sales_email + hardware_main_antenna + hardware_main_battery + 
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
                                 hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
-                                software_main_system)
+                                software_main_system + software_features)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
