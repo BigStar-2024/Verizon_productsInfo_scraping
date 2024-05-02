@@ -34,7 +34,8 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Chassis_Relative Humidity', 'Chassis_Rain & dust resistance', 'Chassis_Vehicle Mounting', 
                      'Network_NAT', 'Network_Routing Protocols', 'Network_Security Protocol', 'Network_VPN Support', 'Network_Numbershare', 
                      'Network_Fax capable', 'Network_Firewall', 'Network_UMTS', 'Network_LTE', 'Network_LTE Global/Roaming', 
-                     'Network_5G', 'Network_5G Global/Roaming'])
+                     'Network_5G', 'Network_5G Global/Roaming', 'Contact_Website', 'Contact_Address', 'Contact_Phone', 
+                     'Contact_Email'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -165,6 +166,14 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             network_other_features = [network_other_features_element.text.replace('\n', ', ') for network_other_features_element in network_other_features_elements]
             print(network_other_features)
 
+            # Contact open
+            contact_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[4].click()
+            ## Contact Field
+            contact_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[4]
+            ### Contact website url
+            contact_features_elements = contact_main_element.find_elements(By.CLASS_NAME, 'details__content-subhead-copy--short-break')
+            contact_features = [contact_features_element.text for contact_features_element in contact_features_elements]
+            print(contact_features)
 
 
 
@@ -179,7 +188,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
                                 hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
                                 software_main_system + software_features + chassis_main_features + chassis_other_features + 
-                                network_main_features + network_other_features)
+                                network_main_features + network_other_features + contact_features)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
