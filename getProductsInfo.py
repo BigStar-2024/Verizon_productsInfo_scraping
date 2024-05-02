@@ -17,7 +17,7 @@ if os.path.exists('Products_info.csv'):
 with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
 
-    writer.writerow(['Device Subtitle', 'Device Title', 'Key Feature_1', 
+    writer.writerow(['Product ID', 'Device Subtitle', 'Device Title', 'Key Feature_1', 
                      'Key Feature_2', 'Key Feature_3', 'Key Feature_4', 'Key Feature_5', 'Key Feature_6', 
                      'Product description', 'Device Type', 'Network Technology', 'LTE catagory support',
                      'Contact_Address', 'Contact_Phone', 'Contact_Email', 'Hardware_Antenna', 
@@ -34,7 +34,7 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Chassis_Relative Humidity', 'Chassis_Rain & dust resistance', 'Chassis_Vehicle Mounting', 
                      'Network_NAT', 'Network_Routing Protocols', 'Network_Security Protocol', 'Network_VPN Support', 'Network_Numbershare', 
                      'Network_Fax capable', 'Network_Firewall', 'Network_UMTS', 'Network_LTE', 'Network_LTE Global/Roaming', 
-                     'Network_5G', 'Network_5G Global/Roaming', 'Contact_Website', 'Contact_Address', 'Contact_Phone', 
+                     'Network_5G', 'Network_5G Global/Roaming', 'Network_GPRS', 'Network_GSM', 'Contact_Website', 'Contact_Address', 'Contact_Phone', 
                      'Contact_Email', 'Industry'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
@@ -42,6 +42,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
     for row in reader:
         product_id = row[0]
         url = f"https://opendevelopment.verizonwireless.com/device-showcase/device/{product_id}"
+        product_number = [product_id]
 
         response = requests.get(url)
         if response.status_code == 200:
@@ -162,8 +163,12 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             network_main_features = [network_main_features_element.text for network_main_features_element in network_main_features_elements]
             print(network_main_features)
             ### Network other features
-            network_other_features_elements = network_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
+            network_other_features_table_elements = network_main_element.find_elements(By.CLASS_NAME, 'details__content-definition-list')
+            network_other_features_elements = network_other_features_table_elements[-1].find_elements(By.CLASS_NAME, 'definition-list-description--right')
             network_other_features = [network_other_features_element.text.replace('\n', ', ') for network_other_features_element in network_other_features_elements]
+            # Pad the key_features list with empty strings if there are fewer than 7 features
+            while len(network_other_features) < 9:
+                network_other_features.append('') 
             print(network_other_features)
 
             # Contact open
@@ -177,7 +182,6 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
 
             # Industry open
             industry_main_click = driver.find_elements(By.CLASS_NAME, 'details__accordion-container')[5].click()
-            print(industry_main_click)
             ## Industry Field
             industry_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[5]
             ### Industry features
@@ -192,7 +196,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             # Save the extracted information to a CSV file
             with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
-                writer.writerow([device_subtitle, device_title] + key_features + product_description + 
+                writer.writerow(product_number + [device_subtitle, device_title] + key_features + product_description + 
                                 overview_device_type + overview_network_technology + overview_category_support + 
                                 contact_sales + contact_sales_email + hardware_main_antenna + hardware_main_battery + 
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
