@@ -32,7 +32,9 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Soft_FWA', 'Soft_Split Data Routing', 'Soft_Multi-APN', 'Soft_Global Capable', 'Soft_Private Wireless Network', 
                      'Chassis_Dimensions', 'Chassis_Weight', 'Chassis_Operating Temperature', 'Chassis_Storage Temperature', 
                      'Chassis_Relative Humidity', 'Chassis_Rain & dust resistance', 'Chassis_Vehicle Mounting', 
-                     'Network_NAT', 'Network_Routing Protocols', 'Network_Security Protocol', 'Network_VPN Support', 'Network_Numbershare'])
+                     'Network_NAT', 'Network_Routing Protocols', 'Network_Security Protocol', 'Network_VPN Support', 'Network_Numbershare', 
+                     'Network_Fax capable', 'Network_Firewall', 'Network_UMTS', 'Network_LTE', 'Network_LTE Global/Roaming', 
+                     'Network_5G', 'Network_5G Global/Roaming'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -116,7 +118,6 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             hardware_main_voltage = [hardware_main[7].text]
             print(hardware_main_antenna, hardware_main_battery, hardware_main_display, hardware_main_ethernet, hardware_main_sim, 
                   hardware_main_usbports, hardware_main_voltage)
-
             # Other features
             other_features = []
             other_elements = hardware_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
@@ -133,7 +134,6 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             software_main_clientType = [software_main[1].text] 
             software_main_system = [software_main[3].text]
             print(software_main_baseband, software_main_clientType, software_main_system)
-
             ### Software Features
             software_features_elements = software_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
             software_features = [software_features_element.text.replace("\n", ",") for software_features_element in software_features_elements]
@@ -147,7 +147,6 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             chassis_main_features_elements = chassis_main_element.find_elements(By.CLASS_NAME, 'details__content-subhead-copy--short-break')
             chassis_main_features = [chassis_main_features_element.text for chassis_main_features_element in chassis_main_features_elements]
             print(chassis_main_features)
-
             ### Chassis other features
             chassis_other_features_elements = chassis_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
             chassis_other_features = [chassis_other_features_element.text for chassis_other_features_element in chassis_other_features_elements]
@@ -161,8 +160,10 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             network_main_features_elements = network_main_element.find_elements(By.CLASS_NAME, 'details__content-subhead-copy--short-break')
             network_main_features = [network_main_features_element.text for network_main_features_element in network_main_features_elements]
             print(network_main_features)
-
-            
+            ### Network other features
+            network_other_features_elements = network_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
+            network_other_features = [network_other_features_element.text.replace('\n', ', ') for network_other_features_element in network_other_features_elements]
+            print(network_other_features)
 
 
 
@@ -178,7 +179,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
                                 hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
                                 software_main_system + software_features + chassis_main_features + chassis_other_features + 
-                                network_main_features)
+                                network_main_features + network_other_features)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
