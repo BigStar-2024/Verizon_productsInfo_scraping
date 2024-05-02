@@ -31,7 +31,8 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Soft_SMS Capability', 'Soft_WEA', 'Soft_Persistent Prefix IPv6', 'Soft_Mobile Private Network', 
                      'Soft_FWA', 'Soft_Split Data Routing', 'Soft_Multi-APN', 'Soft_Global Capable', 'Soft_Private Wireless Network', 
                      'Chassis_Dimensions', 'Chassis_Weight', 'Chassis_Operating Temperature', 'Chassis_Storage Temperature', 
-                     'Chassis_Relative Humidity', 'Chassis_Rain & dust resistance', 'Chassis_Vehicle Mounting'])
+                     'Chassis_Relative Humidity', 'Chassis_Rain & dust resistance', 'Chassis_Vehicle Mounting', 
+                     'Network_NAT', 'Network_Routing Protocols', 'Network_Security Protocol', 'Network_VPN Support', 'Network_Numbershare'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -152,6 +153,19 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             chassis_other_features = [chassis_other_features_element.text for chassis_other_features_element in chassis_other_features_elements]
             print(chassis_other_features)
 
+            # Network open
+            network_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[3].click()
+            ## Network Field
+            network_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[3]
+            ### Network main features
+            network_main_features_elements = network_main_element.find_elements(By.CLASS_NAME, 'details__content-subhead-copy--short-break')
+            network_main_features = [network_main_features_element.text for network_main_features_element in network_main_features_elements]
+            print(network_main_features)
+
+            
+
+
+
 
 
             
@@ -163,7 +177,8 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 contact_sales + contact_sales_email + hardware_main_antenna + hardware_main_battery + 
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
                                 hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
-                                software_main_system + software_features + chassis_main_features + chassis_other_features)
+                                software_main_system + software_features + chassis_main_features + chassis_other_features + 
+                                network_main_features)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
