@@ -22,7 +22,11 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                      'Product description', 'Device Type', 'Network Technology', 'LTE catagory support',
                      'Contact_Address', 'Contact_Phone', 'Contact_Email', 'Hardware_Antenna', 
                      'Hardware_Battery', 'Hardware_Display Resolution', 'Hardware_Ethernet Posts', 'Hardware_Sim Type', 
-                     'Hardware_USB ports', 'Hardware_Voltage supply'])
+                     'Hardware_USB ports', 'Hardware_Voltage supply', 'Other_Accelerometer', 'Other_Z-Wave', 'Other_Audio',
+                     'Other_Battery safety', 'Other_Bluetooth', 'Other_Camera', 'Other_Dual SIM', 'Other_E911', 'Other_eUICC', 
+                     'Other_GNSS', 'Other_GPSS', 'Other_GPS', 'Other_Keyboard', 'Other_Keyboard', 'Other_Magnetic card reader', 'Other_RJ-11', 
+                     'Other_Scanning tech', 'Other_Serial', 'Other_Smart card reader', 'Other_Voice transmission capable', 
+                     'Other_Wifi', 'Zigbee', 'FoTA For Baseband/Modem Software Update Capability', 'FoTA Client Type', 'Operating System'])
 
 with open('product_ids.csv', 'r', encoding='utf-8') as file:
     reader = csv.reader(file) 
@@ -73,13 +77,13 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             # Overview
             overview_elements = driver.find_elements(By.CLASS_NAME, "definition-list-description")
             ## Device Type
-            overview_device_type = [overview_elements[0].text]
+            overview_device_type = [overview_elements[0].text] if len(overview_elements) > 0 else [""]
             print(overview_device_type)
             ## Network Technology
-            overview_network_technology = [overview_elements[1].text]
+            overview_network_technology = [overview_elements[1].text] if len(overview_elements) > 1 else [""]
             print(overview_network_technology)
             ## LTE Category Support
-            overview_category_support = [overview_elements[2].text]
+            overview_category_support = [overview_elements[2].text] if len(overview_elements) > 2 else [""]
             print(overview_category_support)
 
             # Contact Manufacturer
@@ -97,7 +101,6 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             # Hardware Field
             hardware_main_element = driver.find_element(By.CLASS_NAME, 'is-accordion-open')
             hardware_main = hardware_main_element.find_elements(By.CSS_SELECTOR, '.details__content-features--no-border p')
-            print("rte", hardware_main)
             hardware_main_antenna = [hardware_main[0].text]
             hardware_main_battery = [hardware_main[1].text]
             hardware_main_display = [hardware_main[2].text]
@@ -108,8 +111,28 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             print(hardware_main_antenna, hardware_main_battery, hardware_main_display, hardware_main_ethernet, hardware_main_sim, 
                   hardware_main_usbports, hardware_main_voltage)
 
-            #
+            # Other features
+            other_features = []
+            other_elements = hardware_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
+            for other_element in other_elements:
+                other_features.append(other_element.text)
+            print(other_features)
 
+            # Software Field Open
+            software_main_click = driver.find_elements(By.CLASS_NAME, 'details__content-lower')[1].click()
+            # Software Field
+            software_main_element = driver.find_elements(By.CLASS_NAME, 'is-accordion-open')[1]
+            software_main = software_main_element.find_elements(By.CSS_SELECTOR, '.details__content-features--no-border p')
+            software_main_baseband = [software_main[0].text]
+            software_main_clientType = [software_main[1].text] 
+            software_main_system = [software_main[3].text]
+            print(software_main_baseband, software_main_clientType, software_main_system)
+
+            # Software Features
+            software_features_elements = software_main_element.find_elements(By.CLASS_NAME, 'definition-list-description--right')
+            
+
+            
             # Save the extracted information to a CSV file
             with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
@@ -117,11 +140,13 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
                                 overview_device_type + overview_network_technology + overview_category_support + 
                                 contact_sales + contact_sales_email + hardware_main_antenna + hardware_main_battery + 
                                 hardware_main_display + hardware_main_ethernet + hardware_main_sim + hardware_main_usbports + 
-                                hardware_main_voltage)
+                                hardware_main_voltage + other_features + software_main_baseband + software_main_clientType + 
+                                software_main_system)
         except NoSuchElementException:
             print(f"Could not find device subtitle or title for {url}")
 
         # Close the browser window
         driver.quit()
+        print("===============")
 
 print("Information scraped and saved to verizon_device_info.csv")
