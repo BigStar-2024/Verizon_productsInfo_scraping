@@ -18,13 +18,13 @@ with open('Products_info.csv', 'a', newline='', encoding='utf-8') as file:
     writer = csv.writer(file)
 
     writer.writerow(['Product ID', 'Device Subtitle', 'Device Title', 'Key Feature_1', 
-                     'Key Feature_2', 'Key Feature_3', 'Key Feature_4', 'Key Feature_5', 'Key Feature_6', 
+                     'Key Feature_2', 'Key Feature_3', 'Key Feature_4', 'Key Feature_5', 'Key Feature_6', 'Key Feature_7',
                      'Product description', 'Device Type', 'Network Technology', 'LTE catagory support',
                      'Contact_Address', 'Contact_Phone', 'Contact_Email', 'Hardware_Antenna', 
                      'Hardware_Battery', 'Hardware_Display Resolution', 'Hardware_Ethernet Posts', 'Hardware_Sim Type', 
                      'Hardware_USB ports', 'Hardware_Voltage supply', 'Other_Accelerometer', 'Other_Z-Wave', 'Other_Audio',
                      'Other_Battery safety', 'Other_Bluetooth', 'Other_Camera', 'Other_Dual SIM', 'Other_E911', 'Other_eUICC', 
-                     'Other_GNSS', 'Other_GPSS', 'Other_GPS', 'Other_Keyboard', 'Other_Keyboard', 'Other_Magnetic card reader', 'Other_RJ-11', 
+                     'Other_GNSS', 'Other_GPSS', 'Other_GPS', 'Other_Keyboard', 'Other_Magnetic card reader', 'Other_Printer', 'Other_RJ-11', 
                      'Other_Scanning tech', 'Other_Serial', 'Other_Smart card reader', 'Other_Voice transmission capable', 
                      'Other_Wifi', 'Zigbee', 'FoTA For Baseband/Modem Software Update Capability', 'FoTA Client Type', 'Operating System', 
                      'Soft_Developer Kit', 'Soft_Diagnostics', 'Soft_Security Level', 'Soft_EMS', 'Soft_MMS', 'Soft_Remote Management', 
@@ -75,7 +75,7 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             key_features = [feature.text for feature in key_feature_elements]
 
             # Pad the key_features list with empty strings if there are fewer than 6 features
-            while len(key_features) < 6:
+            while len(key_features) < 7:
                 key_features.append('')
             print(key_features)
 
@@ -116,8 +116,8 @@ with open('product_ids.csv', 'r', encoding='utf-8') as file:
             hardware_main_display = [hardware_main[2].text]
             hardware_main_ethernet = [hardware_main[3].text]
             hardware_main_sim = [hardware_main[4].text]
-            hardware_main_usbports = [hardware_main[6].text]
-            hardware_main_voltage = [hardware_main[7].text]
+            hardware_main_usbports = [hardware_main[-2].text]
+            hardware_main_voltage = [hardware_main[-1].text]
             print(hardware_main_antenna, hardware_main_battery, hardware_main_display, hardware_main_ethernet, hardware_main_sim, 
                   hardware_main_usbports, hardware_main_voltage)
             # Other features

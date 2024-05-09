@@ -1,1 +1,1 @@
-c:\Users\user\Pictures\IT group\Main
+py getProductsInfo.py
