@@ -14,14 +14,14 @@ for encoding in encodings:
         print("Error reading CSV file with encoding:", encoding)
 
 # Extract data from the third to fifth columns
-data = df.iloc[:, 19:48]
+data = df.iloc[:, 5:12]
 
 # Convert the extracted data to JSON format
 json_data = data.to_json(orient='records')
 # Replace "\u0097" with "false" in the JSON data
 json_data = json_data.replace("\\u0097", "False")
+json_data = json_data.replace("0\u00b0C", "°")
 json_data = json_data.replace("\/", "/")
-json_data = json_data.replace("null", '"None"')
 print(json_data)
 
 # Load JSON data
